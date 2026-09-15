@@ -1,0 +1,23 @@
+* Nexus Inventory Platform Marg ERP footer-end hook.
+* Exports Marg tables and starts the inventory sync hidden.
+
+LOCAL lcDir, lnOldArea
+lcDir = "C:\marg-sync"
+lnOldArea = SELECT()
+
+IF !DIRECTORY(lcDir)
+    MD (lcDir)
+ENDIF
+
+SELECT PRO
+COPY TO (lcDir + "\pro_full.csv") TYPE CSV
+
+SELECT PROBAT
+COPY TO (lcDir + "\probat_full.csv") TYPE CSV
+
+SELECT DIS
+COPY TO (lcDir + "\dis_full.csv") TYPE CSV
+
+SELECT (lnOldArea)
+
+RUN /N wscript.exe C:\nexus-inventory\marg-hook\run_sync_hidden.vbs
